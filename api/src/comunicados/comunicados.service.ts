@@ -1,5 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Pool } from 'pg';
+import { CreateInformativoDto } from './dto/create-informativo.dto';
+import { UpdateInformativoDto } from './dto/update-informativo.dto';
 
 @Injectable()
 export class ComunicadosService {
@@ -8,7 +10,7 @@ export class ComunicadosService {
   async findAll(search?: string, data?: string, page = 1, limit = 5) {
     const offset = (page - 1) * limit;
 
-    let baseQuery = `SELECT * FROM informativos WHERE 1=1`;
+    let baseQuery = `SELECT * FROM informativos WHERE deleted_at IS NULL`;
     const values: any[] = [];
 
     if (search) {
@@ -21,7 +23,10 @@ export class ComunicadosService {
       baseQuery += ` AND data = $${values.length}`;
     }
 
-    const totalRes = await this.pool.query(baseQuery, values);
+    const totalRes = await this.pool.query(
+      `SELECT COUNT(*) FROM (${baseQuery}) as total`,
+      values,
+    );
 
     values.push(limit, offset);
 
@@ -33,11 +38,11 @@ export class ComunicadosService {
 
     return {
       data: dataRes.rows,
-      total: totalRes.rows.length,
+      total: Number(totalRes.rows[0].count),
     };
   }
 
-  async create(body: any) {
+  async create(body: CreateInformativoDto) {
     const { titulo, descricao, data } = body;
 
     const res = await this.pool.query(
@@ -50,13 +55,13 @@ export class ComunicadosService {
     return res.rows[0];
   }
 
-  async update(id: number, body: any) {
+  async update(id: number, body: UpdateInformativoDto) {
     const { titulo, descricao, data } = body;
 
     const res = await this.pool.query(
       `UPDATE informativos
        SET titulo = $1, descricao = $2, data = $3
-       WHERE id = $4
+       WHERE id = $4 AND deleted_at IS NULL
        RETURNING *`,
       [titulo, descricao, data, id],
     );
@@ -65,7 +70,19 @@ export class ComunicadosService {
   }
 
   async delete(id: number) {
-    await this.pool.query(`DELETE FROM informativos WHERE id = $1`, [id]);
+    await this.pool.query(
+      `UPDATE informativos
+   SET deleted_at = CURRENT_TIMESTAMP
+   WHERE id = $1 AND deleted_at IS NULL`,
+      [id],
+    );
     return { success: true };
+  }
+
+  async restore(id: number) {
+    await this.pool.query(
+      `UPDATE informativos SET deleted_at = NULL WHERE id = $1 AND deleted_at IS NOT NULL`,
+      [id],
+    );
   }
 }
