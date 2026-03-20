@@ -27,7 +27,7 @@ export class ComunicadosService {
 
     const dataRes = await this.pool.query(
       baseQuery +
-        ` ORDER BY created_at DESC, id DESC LIMIT $${values.length - 1} OFFSET $${values.length}`,
+        ` ORDER BY data DESC, id DESC LIMIT $${values.length - 1} OFFSET $${values.length}`,
       values,
     );
 
