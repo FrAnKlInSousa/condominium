@@ -52,7 +52,7 @@ export default function InformativosPage() {
         limit: limite,
       });
 
-      setInformativos(res.data);
+      setInformativos([...res.data]);
       setTotalPaginas(Math.ceil(res.total / limite));
     } catch (err) {
       console.error(err);
