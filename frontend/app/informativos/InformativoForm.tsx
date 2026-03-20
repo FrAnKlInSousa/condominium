@@ -53,6 +53,7 @@ export default function InformativoForm({ informativo, onSuccess }: Props) {
           data,
         });
       }
+      onSuccess();
     } catch (err) {
       console.error(err);
     } finally {

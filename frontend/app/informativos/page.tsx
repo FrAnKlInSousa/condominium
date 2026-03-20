@@ -28,6 +28,7 @@ export default function InformativosPage() {
   const [mostrarToast, setMostrarToast] = useState(false);
   const [informativoSelecionado, setInformativoSelecionado] =
     useState<Informativo | null>(null);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   // 🔁 debounce (substitui RxJS)
   useEffect(() => {
@@ -40,7 +41,7 @@ export default function InformativosPage() {
 
   useEffect(() => {
     loadInformativos();
-  }, [paginaAtual]);
+  }, [paginaAtual, refreshKey]);
 
   async function loadInformativos() {
     try {
@@ -125,15 +126,15 @@ export default function InformativosPage() {
   }
 
   function onSuccess() {
-    loadInformativos();
+    setInformativoSelecionado(null);
+
+    setRefreshKey((prev) => prev + 1); // 👈 FORÇA RELOAD
 
     if (informativoSelecionado) {
       mostrarMensagemTemp("Informativo atualizado");
     } else {
       mostrarMensagemTemp("Informativo criado");
     }
-
-    setInformativoSelecionado(null);
   }
 
   return (
@@ -161,7 +162,7 @@ export default function InformativosPage() {
       </h2>
 
       <InformativoForm
-        key={informativoSelecionado?.id ?? "novo"}
+        key={informativoSelecionado?.id ?? `novo-${refreshKey}`}
         informativo={informativoSelecionado}
         onSuccess={onSuccess}
       />
