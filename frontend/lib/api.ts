@@ -33,3 +33,42 @@ export async function deleteInformativo(id: number) {
     throw new Error("Erro ao deletar");
   }
 }
+
+export async function createInformativo(data: {
+  titulo: string;
+  descricao: string;
+  data: string;
+}) {
+  const res = await fetch(`${API_URL}/comunicados`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) throw new Error("Erro ao criar");
+
+  return res.json();
+}
+
+export async function updateInformativo(
+  id: number,
+  data: {
+    titulo: string;
+    descricao: string;
+    data: string;
+  },
+) {
+  const res = await fetch(`${API_URL}/comunicados/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) throw new Error("Erro ao atualizar");
+
+  return res.json();
+}
