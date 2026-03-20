@@ -126,11 +126,12 @@ export default function InformativosPage() {
   }
 
   function onSuccess() {
+    const isEdit = !!informativoSelecionado;
+
     setInformativoSelecionado(null);
+    setRefreshKey((prev) => prev + 1);
 
-    setRefreshKey((prev) => prev + 1); // 👈 FORÇA RELOAD
-
-    if (informativoSelecionado) {
+    if (isEdit) {
       mostrarMensagemTemp("Informativo atualizado");
     } else {
       mostrarMensagemTemp("Informativo criado");
