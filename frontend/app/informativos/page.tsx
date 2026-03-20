@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import InformativoForm from "./InformativoForm";
 
 import { getInformativos, deleteInformativo } from "@/lib/api";
 type Informativo = {
@@ -25,6 +26,8 @@ export default function InformativosPage() {
 
   const [mensagem, setMensagem] = useState("");
   const [mostrarToast, setMostrarToast] = useState(false);
+  const [informativoSelecionado, setInformativoSelecionado] =
+    useState<Informativo | null>(null);
 
   // 🔁 debounce (substitui RxJS)
   useEffect(() => {
@@ -112,6 +115,27 @@ export default function InformativosPage() {
     return paginas;
   }
 
+  function editar(inf: Informativo) {
+    setInformativoSelecionado(inf);
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  }
+
+  function onSuccess() {
+    loadInformativos();
+
+    if (informativoSelecionado) {
+      mostrarMensagemTemp("Informativo atualizado");
+    } else {
+      mostrarMensagemTemp("Informativo criado");
+    }
+
+    setInformativoSelecionado(null);
+  }
+
   return (
     <div>
       {mostrarToast && <div>{mensagem}</div>}
@@ -132,6 +156,22 @@ export default function InformativosPage() {
         <button onClick={limparFiltro}>Limpar</button>
       </div>
 
+      <h2>
+        {informativoSelecionado ? "Editando Informativo" : "Novo Informativo"}
+      </h2>
+
+      <InformativoForm
+        informativo={informativoSelecionado}
+        onSuccess={onSuccess}
+      />
+
+      {informativoSelecionado && (
+        <button onClick={() => setInformativoSelecionado(null)}>
+          Cancelar edição
+        </button>
+      )}
+
+      <hr />
       <h2>Informativos</h2>
 
       {informativos.map((c) => (
@@ -141,6 +181,7 @@ export default function InformativosPage() {
           <small>{new Date(c.data).toLocaleDateString("pt-BR")}</small>
 
           <div>
+            <button onClick={() => editar(c)}>Editar</button>
             {confirmandoDeleteId === c.id ? (
               <>
                 <button
