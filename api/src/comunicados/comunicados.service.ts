@@ -13,7 +13,7 @@ export class ComunicadosService {
 
     if (search) {
       values.push(`%${search}%`);
-      baseQuery += ` AND titulo ILIKE $${values.length}`;
+      baseQuery += ` AND (titulo ILIKE $${values.length} OR descricao ILIKE $${values.length})`;
     }
 
     if (data) {
@@ -27,7 +27,7 @@ export class ComunicadosService {
 
     const dataRes = await this.pool.query(
       baseQuery +
-        ` ORDER BY id DESC LIMIT $${values.length - 1} OFFSET $${values.length}`,
+        ` ORDER BY created_at DESC, id DESC LIMIT $${values.length - 1} OFFSET $${values.length}`,
       values,
     );
 
