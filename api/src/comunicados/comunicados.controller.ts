@@ -9,6 +9,8 @@ import {
   Query,
 } from '@nestjs/common';
 import { ComunicadosService } from './comunicados.service';
+import { CreateInformativoDto } from './dto/create-informativo.dto';
+import { UpdateInformativoDto } from './dto/update-informativo.dto';
 
 @Controller('comunicados')
 export class ComunicadosController {
@@ -25,12 +27,12 @@ export class ComunicadosController {
   }
 
   @Post()
-  create(@Body() body: any) {
+  create(@Body() body: CreateInformativoDto) {
     return this.service.create(body);
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() body: any) {
+  update(@Param('id') id: string, @Body() body: UpdateInformativoDto) {
     return this.service.update(Number(id), body);
   }
 
