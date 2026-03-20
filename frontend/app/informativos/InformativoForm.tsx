@@ -22,7 +22,6 @@ export default function InformativoForm({ informativo, onSuccess }: Props) {
 
   const [loading, setLoading] = useState(false);
 
-  // 👇 preenche no modo edição
   useEffect(() => {
     if (informativo) {
       setTitulo(informativo.titulo);
@@ -54,8 +53,6 @@ export default function InformativoForm({ informativo, onSuccess }: Props) {
           data,
         });
       }
-
-      onSuccess();
     } catch (err) {
       console.error(err);
     } finally {

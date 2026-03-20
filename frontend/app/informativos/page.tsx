@@ -161,6 +161,7 @@ export default function InformativosPage() {
       </h2>
 
       <InformativoForm
+        key={informativoSelecionado?.id ?? "novo"}
         informativo={informativoSelecionado}
         onSuccess={onSuccess}
       />
