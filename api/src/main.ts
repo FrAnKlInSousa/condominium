@@ -13,13 +13,13 @@ async function bootstrap() {
 
   app.enableCors({
     origin: (origin, callback) => {
+      console.log('CORS origin:', origin);
       // permite requisições sem origin (ex: curl, mobile)
       if (!origin) return callback(null, true);
 
       const allowedOrigins = [
         'http://localhost:3000',
         'https://www.condominiumsp.com.br',
-        'https://condominium-stg.onrender.com',
       ];
 
       // permite domínios fixos
