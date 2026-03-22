@@ -168,8 +168,7 @@ export default function InformativosPage() {
   }
 
   return (
-    <div>
-      <div className="text-red-500 text-2xl">TESTE</div>
+    <div className="space-y-8">
       <div style={{ marginBottom: "16px" }}>
         {isAuthenticated ? (
           <button onClick={handleLogout}>Logout</button>
@@ -179,20 +178,27 @@ export default function InformativosPage() {
       </div>
       {mostrarToast && <div>{mensagem}</div>}
 
-      <div>
+      <div className="bg-white p-4 rounded shadow flex flex-col gap-3 md:flex-row">
         <input
+          className="border rounded px-3 py-2 w-full"
           placeholder="Buscar..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
 
         <input
+          className="border rounded px-3 py-2"
           type="date"
           value={dataFiltro}
           onChange={(e) => setDataFiltro(e.target.value)}
         />
 
-        <button onClick={limparFiltro}>Limpar</button>
+        <button
+          className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+          onClick={limparFiltro}
+        >
+          Limpar
+        </button>
       </div>
 
       {isAuthenticated && (
@@ -227,14 +233,24 @@ export default function InformativosPage() {
       <h2>Informativos</h2>
 
       {informativos.map((c) => (
-        <div key={c.id}>
-          <h3>{c.titulo}</h3>
-          <p>{c.descricao}</p>
-          <small>{new Date(c.data).toLocaleDateString("pt-BR")}</small>
+        <div
+          key={c.id}
+          className="bg-white p-5 rounded shadow space-y-3 border border-gray-100"
+        >
+          <h3 className="text-lg font-semibold text-gray-800">{c.titulo}</h3>
+          <p className="text-gray-600">{c.descricao}</p>
+          <small className="text-gray-400">
+            {new Date(c.data).toLocaleDateString("pt-BR")}
+          </small>
 
           {isAuthenticated && (
             <div>
-              <button onClick={() => editar(c)}>Editar</button>
+              <button
+                className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
+                onClick={() => editar(c)}
+              >
+                Editar
+              </button>
 
               {confirmandoDeleteId === c.id ? (
                 <>
@@ -250,7 +266,12 @@ export default function InformativosPage() {
                   </button>
                 </>
               ) : (
-                <button onClick={() => handleDelete(c.id)}>Deletar</button>
+                <button
+                  className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+                  onClick={() => handleDelete(c.id)}
+                >
+                  Deletar
+                </button>
               )}
             </div>
           )}
