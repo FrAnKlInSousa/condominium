@@ -283,6 +283,12 @@ export default function InformativosPage() {
         </div>
       ))}
 
+      {informativos.length === 0 && (
+        <div className="text-center text-gray-500">
+          Nenhum informativo encontrado!!
+        </div>
+      )}
+
       <div className="flex gap-2 items-center justify-center mt-4">
         <button
           className="px-3 py-1 border rounded bg-white hover:bg-gray-100 disabled:opacity-50"
