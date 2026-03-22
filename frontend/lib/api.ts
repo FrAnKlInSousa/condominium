@@ -1,4 +1,42 @@
+import { getToken } from "./auth";
+
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+// 🔥 wrapper central
+async function apiFetch(url: string, options: RequestInit = {}) {
+  const token = getToken();
+
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    ...((options.headers as Record<string, string>) || {}),
+  };
+
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+
+  const res = await fetch(`${API_URL}${url}`, {
+    ...options,
+    headers,
+  });
+
+  if (res.status === 401) {
+    // 🔥 opcional: limpar token automaticamente
+    localStorage.removeItem("token");
+    window.location.href = "/login";
+    return;
+  }
+
+  if (!res.ok) {
+    throw new Error("Erro na requisição");
+  }
+
+  return res.json();
+}
+
+// =========================
+// INFORMativos
+// =========================
 
 export async function getInformativos(params: {
   search?: string;
@@ -13,25 +51,15 @@ export async function getInformativos(params: {
   query.append("page", String(params.page ?? 1));
   query.append("limit", String(params.limit ?? 5));
 
-  const res = await fetch(`${API_URL}/comunicados?${query.toString()}`, {
+  return apiFetch(`/comunicados?${query.toString()}`, {
     cache: "no-store",
   });
-
-  if (!res.ok) {
-    throw new Error("Erro ao buscar informativos");
-  }
-
-  return res.json();
 }
 
 export async function deleteInformativo(id: number) {
-  const res = await fetch(`${API_URL}/comunicados/${id}/delete`, {
+  return apiFetch(`/comunicados/${id}/delete`, {
     method: "PATCH",
   });
-
-  if (!res.ok) {
-    throw new Error("Erro ao deletar");
-  }
 }
 
 export async function createInformativo(data: {
@@ -39,17 +67,10 @@ export async function createInformativo(data: {
   descricao: string;
   data: string;
 }) {
-  const res = await fetch(`${API_URL}/comunicados`, {
+  return apiFetch(`/comunicados`, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify(data),
   });
-
-  if (!res.ok) throw new Error("Erro ao criar");
-
-  return res.json();
 }
 
 export async function updateInformativo(
@@ -60,15 +81,19 @@ export async function updateInformativo(
     data: string;
   },
 ) {
-  const res = await fetch(`${API_URL}/comunicados/${id}`, {
+  return apiFetch(`/comunicados/${id}`, {
     method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify(data),
   });
+}
 
-  if (!res.ok) throw new Error("Erro ao atualizar");
+// =========================
+// AUTH
+// =========================
 
-  return res.json();
+export async function login(email: string, password: string) {
+  return apiFetch(`/auth/login`, {
+    method: "POST",
+    body: JSON.stringify({ email, password }),
+  });
 }
