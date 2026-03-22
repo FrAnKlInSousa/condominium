@@ -18,6 +18,7 @@ async function apiFetch(url: string, options: RequestInit = {}) {
   const res = await fetch(`${API_URL}${url}`, {
     ...options,
     headers,
+    credentials: "include",
   });
 
   if (res.status === 401) {
