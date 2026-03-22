@@ -62,28 +62,43 @@ export default function InformativoForm({ informativo, onSuccess }: Props) {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form
+      onSubmit={handleSubmit}
+      className="bg-white p-5 rounded shadow space-y-4"
+    >
       <input
+        className="border rounded px-3 py-2 w-full"
         placeholder="Título"
         value={titulo}
         onChange={(e) => setTitulo(e.target.value)}
       />
 
       <textarea
+        className="border rounded px-3 py-2 w-full"
         placeholder="Descrição"
         value={descricao}
         onChange={(e) => setDescricao(e.target.value)}
       />
 
-      <input
-        type="date"
-        value={data}
-        onChange={(e) => setData(e.target.value)}
-      />
+      <div className="flex gap-3 items-end">
+        <div className="flex flex-col">
+          <label className="text-sm text-gray-600">Dia em que ocorreu</label>
+          <input
+            className="border rounded px-3 py-2"
+            type="date"
+            value={data}
+            onChange={(e) => setData(e.target.value)}
+          />
+        </div>
 
-      <button type="submit" disabled={loading}>
-        {loading ? "Salvando..." : informativo ? "Atualizar" : "Criar"}
-      </button>
+        <button
+          type="submit"
+          disabled={loading}
+          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 disabled:opacity-50"
+        >
+          {loading ? "Salvando..." : informativo ? "Atualizar" : "Criar"}
+        </button>
+      </div>
     </form>
   );
 }

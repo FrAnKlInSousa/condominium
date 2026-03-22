@@ -169,11 +169,21 @@ export default function InformativosPage() {
 
   return (
     <div className="space-y-8">
-      <div style={{ marginBottom: "16px" }}>
+      <div className="flex justify-end">
         {isAuthenticated ? (
-          <button onClick={handleLogout}>Logout</button>
+          <button
+            onClick={handleLogout}
+            className="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-900"
+          >
+            Logout
+          </button>
         ) : (
-          <button onClick={() => router.push("/login")}>Login</button>
+          <button
+            onClick={() => router.push("/login")}
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          >
+            Login
+          </button>
         )}
       </div>
       {mostrarToast && <div>{mensagem}</div>}
@@ -203,34 +213,33 @@ export default function InformativosPage() {
 
       {isAuthenticated && (
         <>
-          <h2>
+          <h2 className="text-xl font-semibold">
             {informativoSelecionado
               ? "Editando Informativo"
               : "Novo Informativo"}
           </h2>
 
-          <InformativoForm
-            key={informativoSelecionado?.id ?? `novo-${refreshKey}`}
-            informativo={informativoSelecionado}
-            onSuccess={onSuccess}
-          />
+          <div className="space-y-3">
+            <InformativoForm
+              key={informativoSelecionado?.id ?? `novo-${refreshKey}`}
+              informativo={informativoSelecionado}
+              onSuccess={onSuccess}
+            />
 
-          {informativoSelecionado && (
-            <button onClick={() => setInformativoSelecionado(null)}>
-              Cancelar edição
-            </button>
-          )}
+            {informativoSelecionado && (
+              <button
+                className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+                onClick={() => setInformativoSelecionado(null)}
+              >
+                Cancelar edição
+              </button>
+            )}
+          </div>
         </>
       )}
 
-      {informativoSelecionado && (
-        <button onClick={() => setInformativoSelecionado(null)}>
-          Cancelar edição
-        </button>
-      )}
-
       <hr />
-      <h2>Informativos</h2>
+      <h2 className="text-xl font-semibold mt-6">Informativos</h2>
 
       {informativos.map((c) => (
         <div
@@ -244,7 +253,7 @@ export default function InformativosPage() {
           </small>
 
           {isAuthenticated && (
-            <div>
+            <div className="flex gap-2 mt-2">
               <button
                 className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
                 onClick={() => editar(c)}
@@ -255,13 +264,17 @@ export default function InformativosPage() {
               {confirmandoDeleteId === c.id ? (
                 <>
                   <button
+                    className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
                     onClick={() => handleDelete(c.id)}
                     disabled={deletandoIds.has(c.id)}
                   >
                     {deletandoIds.has(c.id) ? "Deletando..." : "Confirmar"}
                   </button>
 
-                  <button onClick={() => setConfirmandoDeleteId(null)}>
+                  <button
+                    className="bg-gray-400 text-white px-3 py-1 rounded hover:bg-gray-500"
+                    onClick={() => setConfirmandoDeleteId(null)}
+                  >
                     Cancelar
                   </button>
                 </>
@@ -278,16 +291,22 @@ export default function InformativosPage() {
         </div>
       ))}
 
-      <div>
+      <div className="flex gap-2 items-center justify-center mt-4">
         <button
+          className="px-3 py-1 border rounded bg-white hover:bg-gray-100 disabled:opacity-50"
           onClick={() => setPaginaAtual((p) => p - 1)}
           disabled={paginaAtual === 1}
         >
-          ⬅
+          Anterior
         </button>
 
         {getPaginas().map((p) => (
           <button
+            className={`px-3 py-1 border rounded ${
+              p === paginaAtual
+                ? "bg-blue-600 text-white"
+                : "bg-white hover:bg-gray-100"
+            }`}
             key={p}
             onClick={() => setPaginaAtual(p)}
             style={{ fontWeight: p === paginaAtual ? "bold" : "normal" }}
@@ -297,10 +316,11 @@ export default function InformativosPage() {
         ))}
 
         <button
+          className="px-3 py-1 border rounded bg-white hover:bg-gray-100 disabled:opacity-50"
           onClick={() => setPaginaAtual((p) => p + 1)}
           disabled={paginaAtual === totalPaginas}
         >
-          ➡
+          Próxima
         </button>
       </div>
     </div>
