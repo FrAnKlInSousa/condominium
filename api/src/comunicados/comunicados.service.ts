@@ -60,9 +60,12 @@ export class ComunicadosService {
 
     const res = await this.pool.query(
       `UPDATE informativos
-       SET titulo = $1, descricao = $2, data = $3
-       WHERE id = $4 AND deleted_at IS NULL
-       RETURNING *`,
+   SET titulo = $1,
+       descricao = $2,
+       data = $3,
+       updated_at = CURRENT_TIMESTAMP
+   WHERE id = $4 AND deleted_at IS NULL
+   RETURNING *`,
       [titulo, descricao, data, id],
     );
 
