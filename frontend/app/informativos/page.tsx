@@ -263,7 +263,7 @@ export default function InformativosPage() {
                     onClick={() => handleDelete(c.id)}
                     disabled={deletandoIds.has(c.id)}
                   >
-                    {deletandoIds.has(c.id) ? "Deletando..." : "Confirmar"}
+                    Confirmar
                   </Button>
 
                   <Button
