@@ -42,4 +42,15 @@ export class AuthController {
   getMe(@Req() req: any) {
     return req.user;
   }
+
+  @Get('logout')
+  logout(@Res({ passthrough: true }) res: Response) {
+    res.clearCookie('access_token', {
+      httpOnly: true,
+      sameSite: 'lax',
+      secure: process.env.NODE_ENV === 'production',
+    });
+
+    return { success: true };
+  }
 }
