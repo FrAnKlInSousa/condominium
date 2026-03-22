@@ -12,7 +12,27 @@ async function bootstrap() {
   );
 
   app.enableCors({
-    origin: ['http://localhost:3000', 'https://condominium-6jtn.onrender.com'],
+    origin: (origin, callback) => {
+      // permite requisições sem origin (ex: curl, mobile)
+      if (!origin) return callback(null, true);
+
+      const allowedOrigins = [
+        'http://localhost:3000',
+        'https://www.condominiumsp.com.br',
+      ];
+
+      // permite domínios fixos
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      // permite qualquer preview da Vercel
+      if (origin.endsWith('.vercel.app')) {
+        return callback(null, true);
+      }
+
+      return callback(new Error('Not allowed by CORS'));
+    },
   });
 
   await app.listen(process.env.PORT ?? 3001);
