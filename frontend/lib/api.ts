@@ -14,10 +14,7 @@ async function apiFetch(url: string, options: RequestInit = {}) {
   });
 
   if (res.status === 401) {
-    // 🔥 opcional: limpar token automaticamente
-    localStorage.removeItem("token");
-    window.location.href = "/login";
-    return;
+    throw new Error("Unauthorized");
   }
 
   if (!res.ok) {
