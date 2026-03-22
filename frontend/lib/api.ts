@@ -90,3 +90,9 @@ export async function login(email: string, password: string) {
     body: JSON.stringify({ email, password }),
   });
 }
+
+export async function getMe() {
+  return apiFetch(`/auth/me`, {
+    method: "GET",
+  });
+}
