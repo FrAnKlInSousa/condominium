@@ -310,7 +310,7 @@ export default function InformativosPage() {
         <button
           className="px-3 py-1 border rounded bg-white hover:bg-gray-100 disabled:opacity-50"
           onClick={() => setPaginaAtual((p) => p + 1)}
-          disabled={paginaAtual === totalPaginas}
+          disabled={paginaAtual === totalPaginas || totalPaginas === 0}
         >
           Próxima
         </button>
