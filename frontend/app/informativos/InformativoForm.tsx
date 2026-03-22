@@ -84,7 +84,7 @@ export default function InformativoForm({ informativo, onSuccess }: Props) {
         <div className="flex flex-col">
           <label className="text-sm text-gray-600">Dia em que ocorreu</label>
           <input
-            className="border rounded px-3 py-2"
+            className="border rounded px-3 h-10"
             type="date"
             value={data}
             onChange={(e) => setData(e.target.value)}
@@ -94,7 +94,7 @@ export default function InformativoForm({ informativo, onSuccess }: Props) {
         <button
           type="submit"
           disabled={loading}
-          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 disabled:opacity-50"
+          className="bg-green-600 text-white px-4 h-10 rounded hover:bg-green-700 disabled:opacity-50"
         >
           {loading ? "Salvando..." : informativo ? "Atualizar" : "Criar"}
         </button>
