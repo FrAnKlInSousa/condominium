@@ -19,6 +19,7 @@ async function bootstrap() {
       const allowedOrigins = [
         'http://localhost:3000',
         'https://www.condominiumsp.com.br',
+        'https://condominium-stg.onrender.com',
       ];
 
       // permite domínios fixos
