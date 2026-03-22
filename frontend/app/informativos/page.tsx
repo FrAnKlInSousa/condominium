@@ -48,7 +48,7 @@ export default function InformativosPage() {
 
   useEffect(() => {
     loadInformativos();
-  }, [paginaAtual, refreshKey]);
+  }, [paginaAtual, refreshKey, dataFiltro]);
 
   useEffect(() => {
     async function checkAuth() {
@@ -120,7 +120,7 @@ export default function InformativosPage() {
     setSearch("");
     setDataFiltro("");
     setPaginaAtual(1);
-    loadInformativos();
+    setRefreshKey((prev) => prev + 1);
   }
 
   function getPaginas() {
