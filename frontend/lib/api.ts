@@ -93,3 +93,9 @@ export async function getMe() {
     method: "GET",
   });
 }
+
+export async function logout() {
+  return apiFetch("/auth/logout", {
+    method: "GET",
+  });
+}

@@ -6,6 +6,8 @@ import InformativoForm from "./InformativoForm";
 import { getMe } from "@/lib/api";
 
 import { getInformativos, deleteInformativo } from "@/lib/api";
+import { logout } from "@/lib/api";
+
 type Informativo = {
   id: number;
   titulo: string;
@@ -155,8 +157,26 @@ export default function InformativosPage() {
     }
   }
 
+  async function handleLogout() {
+    try {
+      await logout();
+      setIsAuthenticated(false);
+      router.push("/login");
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   return (
     <div>
+      <div className="text-red-500 text-2xl">TESTE</div>
+      <div style={{ marginBottom: "16px" }}>
+        {isAuthenticated ? (
+          <button onClick={handleLogout}>Logout</button>
+        ) : (
+          <button onClick={() => router.push("/login")}>Login</button>
+        )}
+      </div>
       {mostrarToast && <div>{mensagem}</div>}
 
       <div>
