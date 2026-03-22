@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { login } from "@/lib/api";
-import { setToken } from "@/lib/auth";
 import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
@@ -20,7 +19,7 @@ export default function LoginPage() {
     try {
       const res = await login(email, password);
 
-      setToken(res.access_token);
+      await login(email, password);
 
       router.push("/informativos");
     } catch (err) {

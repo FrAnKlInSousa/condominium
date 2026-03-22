@@ -1,6 +1,5 @@
 "use client";
 
-import { getToken } from "@/lib/auth";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import InformativoForm from "./InformativoForm";
@@ -32,14 +31,6 @@ export default function InformativosPage() {
     useState<Informativo | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
   const router = useRouter();
-
-  useEffect(() => {
-    const token = getToken();
-
-    if (!token) {
-      router.push("/login");
-    }
-  }, []);
 
   // 🔁 debounce (substitui RxJS)
   useEffect(() => {
