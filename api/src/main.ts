@@ -10,7 +10,31 @@ async function bootstrap() {
       forbidNonWhitelisted: true, // erro se mandar campo inválido
     }),
   );
-  app.enableCors();
+  app.enableCors({});
+  app.enableCors({
+    origin: (origin, callback) => {
+      console.log('============== CORS origin:', origin);
+      // permite requisições sem origin (ex: curl, mobile)
+      if (!origin) return callback(null, true);
+
+      const allowedOrigins = [
+        'http://localhost:3000',
+        'https://www.condominiumsp.com.br',
+      ];
+
+      // permite domínios fixos
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      // permite qualquer preview da Vercel
+      if (origin.endsWith('.vercel.app')) {
+        return callback(null, true);
+      }
+
+      return callback(new Error('Not allowed by CORS'));
+    },
+  });
 
   await app.listen(process.env.PORT ?? 3001);
 }
