@@ -7,6 +7,7 @@ import { getMe } from "@/lib/api";
 
 import { getInformativos, deleteInformativo } from "@/lib/api";
 import { logout } from "@/lib/api";
+import Button from "@/components/Button";
 
 type Informativo = {
   id: number;
@@ -171,19 +172,13 @@ export default function InformativosPage() {
     <div className="space-y-8">
       <div className="flex justify-end">
         {isAuthenticated ? (
-          <button
-            onClick={handleLogout}
-            className="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-900"
-          >
+          <Button onClick={handleLogout} variant="secondary">
             Logout
-          </button>
+          </Button>
         ) : (
-          <button
-            onClick={() => router.push("/login")}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-          >
+          <Button onClick={() => router.push("/login")} variant="primary">
             Login
-          </button>
+          </Button>
         )}
       </div>
       {mostrarToast && <div>{mensagem}</div>}
@@ -254,37 +249,34 @@ export default function InformativosPage() {
 
           {isAuthenticated && (
             <div className="flex gap-2 mt-2">
-              <button
+              <Button
                 className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
                 onClick={() => editar(c)}
               >
                 Editar
-              </button>
+              </Button>
 
               {confirmandoDeleteId === c.id ? (
                 <>
-                  <button
+                  <Button
                     className="bg-red-600 text-white px-3 py-1 rounded hover:bg-red-700"
                     onClick={() => handleDelete(c.id)}
                     disabled={deletandoIds.has(c.id)}
                   >
                     {deletandoIds.has(c.id) ? "Deletando..." : "Confirmar"}
-                  </button>
+                  </Button>
 
-                  <button
+                  <Button
                     className="bg-gray-400 text-white px-3 py-1 rounded hover:bg-gray-500"
                     onClick={() => setConfirmandoDeleteId(null)}
                   >
                     Cancelar
-                  </button>
+                  </Button>
                 </>
               ) : (
-                <button
-                  className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-                  onClick={() => handleDelete(c.id)}
-                >
+                <Button variant="danger" onClick={() => handleDelete(c.id)}>
                   Deletar
-                </button>
+                </Button>
               )}
             </div>
           )}
