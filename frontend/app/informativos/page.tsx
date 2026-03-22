@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import InformativoForm from "./InformativoForm";
+import { getMe } from "@/lib/api";
 
 import { getInformativos, deleteInformativo } from "@/lib/api";
 type Informativo = {
@@ -31,6 +32,7 @@ export default function InformativosPage() {
     useState<Informativo | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
   const router = useRouter();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   // 🔁 debounce (substitui RxJS)
   useEffect(() => {
@@ -44,6 +46,19 @@ export default function InformativosPage() {
   useEffect(() => {
     loadInformativos();
   }, [paginaAtual, refreshKey]);
+
+  useEffect(() => {
+    async function checkAuth() {
+      try {
+        await getMe();
+        setIsAuthenticated(true);
+      } catch {
+        setIsAuthenticated(false);
+      }
+    }
+
+    checkAuth();
+  }, []);
 
   async function loadInformativos() {
     try {
@@ -160,15 +175,27 @@ export default function InformativosPage() {
         <button onClick={limparFiltro}>Limpar</button>
       </div>
 
-      <h2>
-        {informativoSelecionado ? "Editando Informativo" : "Novo Informativo"}
-      </h2>
+      {isAuthenticated && (
+        <>
+          <h2>
+            {informativoSelecionado
+              ? "Editando Informativo"
+              : "Novo Informativo"}
+          </h2>
 
-      <InformativoForm
-        key={informativoSelecionado?.id ?? `novo-${refreshKey}`}
-        informativo={informativoSelecionado}
-        onSuccess={onSuccess}
-      />
+          <InformativoForm
+            key={informativoSelecionado?.id ?? `novo-${refreshKey}`}
+            informativo={informativoSelecionado}
+            onSuccess={onSuccess}
+          />
+
+          {informativoSelecionado && (
+            <button onClick={() => setInformativoSelecionado(null)}>
+              Cancelar edição
+            </button>
+          )}
+        </>
+      )}
 
       {informativoSelecionado && (
         <button onClick={() => setInformativoSelecionado(null)}>
@@ -185,25 +212,28 @@ export default function InformativosPage() {
           <p>{c.descricao}</p>
           <small>{new Date(c.data).toLocaleDateString("pt-BR")}</small>
 
-          <div>
-            <button onClick={() => editar(c)}>Editar</button>
-            {confirmandoDeleteId === c.id ? (
-              <>
-                <button
-                  onClick={() => handleDelete(c.id)}
-                  disabled={deletandoIds.has(c.id)}
-                >
-                  {deletandoIds.has(c.id) ? "Deletando..." : "Confirmar"}
-                </button>
+          {isAuthenticated && (
+            <div>
+              <button onClick={() => editar(c)}>Editar</button>
 
-                <button onClick={() => setConfirmandoDeleteId(null)}>
-                  Cancelar
-                </button>
-              </>
-            ) : (
-              <button onClick={() => handleDelete(c.id)}>Deletar</button>
-            )}
-          </div>
+              {confirmandoDeleteId === c.id ? (
+                <>
+                  <button
+                    onClick={() => handleDelete(c.id)}
+                    disabled={deletandoIds.has(c.id)}
+                  >
+                    {deletandoIds.has(c.id) ? "Deletando..." : "Confirmar"}
+                  </button>
+
+                  <button onClick={() => setConfirmandoDeleteId(null)}>
+                    Cancelar
+                  </button>
+                </>
+              ) : (
+                <button onClick={() => handleDelete(c.id)}>Deletar</button>
+              )}
+            </div>
+          )}
         </div>
       ))}
 
