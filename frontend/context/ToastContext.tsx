@@ -3,23 +3,24 @@
 import { createContext, useContext, useState } from "react";
 import Toast from "@/components/Toast";
 
+type ToastType = "success" | "error";
+
+type ToastState = {
+  message: string;
+  type: ToastType;
+};
+
 type ToastContextType = {
-  showToast: (message: string) => void;
+  showToast: (message: string, type?: ToastType) => void;
 };
 
 const ToastContext = createContext<ToastContextType | null>(null);
 
 export function ToastProvider({ children }: { children: React.ReactNode }) {
-  const [message, setMessage] = useState("");
-  const [visible, setVisible] = useState(false);
+  const [toast, setToast] = useState<ToastState | null>(null);
 
-  function showToast(msg: string) {
-    setVisible(false);
-
-    setTimeout(() => {
-      setMessage(msg);
-      setVisible(true);
-    }, 10);
+  function showToast(message: string, type: ToastType = "success") {
+    setToast({ message, type });
   }
 
   return (
@@ -27,9 +28,10 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
       {children}
 
       <Toast
-        message={message}
-        visible={visible}
-        onClose={() => setVisible(false)}
+        message={toast?.message || ""}
+        visible={!!toast}
+        onClose={() => setToast(null)}
+        type={toast?.type}
       />
     </ToastContext.Provider>
   );

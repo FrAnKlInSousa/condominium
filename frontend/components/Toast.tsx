@@ -2,11 +2,14 @@
 
 import { useEffect, useState } from "react";
 
+type ToastType = "success" | "error";
+
 type ToastProps = {
   message: string;
   visible: boolean;
   onClose: () => void;
   duration?: number;
+  type?: ToastType;
 };
 
 export default function Toast({
@@ -14,6 +17,7 @@ export default function Toast({
   visible,
   onClose,
   duration = 2500,
+  type = "success",
 }: ToastProps) {
   const [show, setShow] = useState(false);
 
@@ -32,8 +36,12 @@ export default function Toast({
 
   if (!show) return null;
 
+  const bgColor = type === "success" ? "bg-green-600" : "bg-red-600";
+
   return (
-    <div className="fixed top-4 right-4 bg-green-600 text-white px-4 py-2 rounded shadow-lg animate-fade-in">
+    <div
+      className={`fixed top-4 right-4 text-white px-4 py-2 rounded shadow-lg animate-fade-in ${bgColor}`}
+    >
       {message}
     </div>
   );
