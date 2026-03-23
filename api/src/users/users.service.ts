@@ -30,4 +30,18 @@ export class UsersService {
 
     return res.rows[0];
   }
+
+  async updateStatus(userId: number, status: string): Promise<User> {
+    const res = await this.pool.query(
+      `
+      UPDATE users
+      SET status = $1
+      WHERE id = $2
+      RETURNING *
+      `,
+      [status, userId],
+    );
+
+    return res.rows[0];
+  }
 }
