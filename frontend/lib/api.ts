@@ -54,7 +54,7 @@ export async function deleteInformativo(id: number) {
 
 export async function createInformativo(data: {
   titulo: string;
-  descricao: string;
+  descricao?: string;
   data: string;
 }) {
   return apiFetch(`/comunicados`, {
@@ -67,7 +67,7 @@ export async function updateInformativo(
   id: number,
   data: {
     titulo: string;
-    descricao: string;
+    descricao?: string;
     data: string;
   },
 ) {

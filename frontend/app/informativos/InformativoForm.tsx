@@ -42,18 +42,15 @@ export default function InformativoForm({ informativo, onSuccess }: Props) {
     setLoading(true);
 
     try {
+      const payload = {
+        titulo,
+        descricao: descricao?.trim() || undefined,
+        data,
+      };
       if (informativo?.id) {
-        await updateInformativo(informativo.id, {
-          titulo,
-          descricao,
-          data,
-        });
+        await updateInformativo(informativo.id, payload);
       } else {
-        await createInformativo({
-          titulo,
-          descricao,
-          data,
-        });
+        await createInformativo(payload);
       }
       onSuccess();
     } catch (err) {
@@ -78,7 +75,9 @@ export default function InformativoForm({ informativo, onSuccess }: Props) {
       </div>
 
       <div className="flex flex-col gap-1">
-        <label className="text-sm font-medium text-gray-700">Descrição</label>
+        <label className="text-sm font-medium text-gray-700">
+          Descrição <span className="text-gray-400">(opcional)</span>
+        </label>
         <textarea
           className="border rounded px-3 py-2 w-full min-h-[100px] resize-none"
           placeholder="Descreva o ocorrido..."
