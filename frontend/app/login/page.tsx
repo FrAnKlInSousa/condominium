@@ -31,7 +31,7 @@ export default function LoginPage() {
       router.push("/informativos");
     } catch (err) {
       console.error(err);
-      showToast("Erro ao fazer login");
+      showToast("Erro ao fazer login", "error");
     } finally {
       setLoading(false);
     }
