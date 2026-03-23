@@ -1,12 +1,17 @@
-import { IsString, IsNotEmpty, IsDateString } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsDateString,
+  IsOptional,
+} from 'class-validator';
 
 export class CreateInformativoDto {
   @IsString()
   @IsNotEmpty()
   titulo: string;
 
+  @IsOptional()
   @IsString()
-  @IsNotEmpty()
   descricao: string;
 
   @IsDateString()
