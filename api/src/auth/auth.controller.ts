@@ -10,6 +10,7 @@ import {
 import { AuthService } from './auth.service';
 import type { Response } from 'express';
 import { JwtAuthGuard } from './jwt-auth.guard';
+import { getCookieConfig } from './cookie.config';
 
 @Controller('auth')
 export class AuthController {
@@ -27,12 +28,7 @@ export class AuthController {
   ) {
     const result = await this.authService.login(body.email, body.password);
 
-    res.cookie('access_token', result.access_token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 1000 * 60 * 60 * 24, // 1 dia
-    });
+    res.cookie('access_token', result.access_token, getCookieConfig());
 
     return { success: true };
   }
