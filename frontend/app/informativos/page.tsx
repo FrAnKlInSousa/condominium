@@ -1,12 +1,10 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import InformativoForm from "./InformativoForm";
 import { getMe } from "@/lib/api";
 
 import { getInformativos, deleteInformativo } from "@/lib/api";
-import { logout } from "@/lib/api";
 import Button from "@/components/Button";
 import { useToast } from "@/context/ToastContext";
 
@@ -32,12 +30,13 @@ export default function InformativosPage() {
 
   const [informativoSelecionado, setInformativoSelecionado] =
     useState<Informativo | null>(null);
+
   const [refreshKey, setRefreshKey] = useState(0);
-  const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+
   const { showToast } = useToast();
 
-  // 🔁 debounce (substitui RxJS)
+  // 🔁 debounce busca
   useEffect(() => {
     const timeout = setTimeout(() => {
       loadInformativos();
@@ -50,6 +49,7 @@ export default function InformativosPage() {
     loadInformativos();
   }, [paginaAtual, refreshKey, dataFiltro]);
 
+  // 🔐 controle simples de auth (apenas UI)
   useEffect(() => {
     async function checkAuth() {
       try {
@@ -149,30 +149,8 @@ export default function InformativosPage() {
     }
   }
 
-  async function handleLogout() {
-    try {
-      await logout();
-      setIsAuthenticated(false);
-      router.push("/login");
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
   return (
     <div className="space-y-8">
-      <div className="flex justify-end">
-        {isAuthenticated ? (
-          <Button onClick={handleLogout} variant="secondary">
-            Logout
-          </Button>
-        ) : (
-          <Button onClick={() => router.push("/login")} variant="primary">
-            Login
-          </Button>
-        )}
-      </div>
-
       <div className="bg-white p-4 rounded-lg shadow-sm flex flex-col gap-3 md:flex-row border">
         <input
           className="border rounded px-3 py-2 w-full"
@@ -290,14 +268,13 @@ export default function InformativosPage() {
 
         {getPaginas().map((p) => (
           <button
+            key={p}
             className={`px-3 py-1 border rounded ${
               p === paginaAtual
                 ? "bg-blue-600 text-white"
                 : "bg-white hover:bg-gray-100"
             }`}
-            key={p}
             onClick={() => setPaginaAtual(p)}
-            style={{ fontWeight: p === paginaAtual ? "bold" : "normal" }}
           >
             {p}
           </button>
