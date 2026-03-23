@@ -44,12 +44,13 @@ export class ComunicadosService {
 
   async create(body: CreateInformativoDto) {
     const { titulo, descricao, data } = body;
+    const descricaoValue = descricao ?? null;
 
     const res = await this.pool.query(
       `INSERT INTO informativos (titulo, descricao, data)
        VALUES ($1, $2, $3)
        RETURNING *`,
-      [titulo, descricao, data],
+      [titulo, descricaoValue, data],
     );
 
     return res.rows[0];
