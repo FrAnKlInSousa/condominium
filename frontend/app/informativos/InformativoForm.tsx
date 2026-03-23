@@ -66,26 +66,32 @@ export default function InformativoForm({ informativo, onSuccess }: Props) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-white p-5 rounded-lg shadow-sm space-y-4 border"
+      className="bg-white p-6 rounded-lg shadow-sm border space-y-6"
     >
-      <div className="flex flex-col md:w-1/2">
+      <div className="flex flex-col gap-1 md:w-1/2">
+        <label className="text-sm font-medium text-gray-700">Título</label>
         <Input
-          placeholder="Título"
+          placeholder="Digite o título"
           value={titulo}
           onChange={(e) => setTitulo(e.target.value)}
         />
       </div>
 
-      <textarea
-        className="border rounded px-3 py-2 w-full"
-        placeholder="Descrição"
-        value={descricao}
-        onChange={(e) => setDescricao(e.target.value)}
-      />
+      <div className="flex flex-col gap-1">
+        <label className="text-sm font-medium text-gray-700">Descrição</label>
+        <textarea
+          className="border rounded px-3 py-2 w-full min-h-[100px] resize-none"
+          placeholder="Descreva o ocorrido..."
+          value={descricao}
+          onChange={(e) => setDescricao(e.target.value)}
+        />
+      </div>
 
-      <div className="flex gap-3 items-end">
-        <div className="flex flex-col">
-          <label className="text-sm text-gray-600">Dia em que ocorreu</label>
+      <div className="flex flex-col md:flex-row md:items-end gap-4">
+        <div className="flex flex-col gap-1">
+          <label className="text-sm font-medium text-gray-700">
+            Data do ocorrido
+          </label>
           <Input
             type="date"
             value={data}
@@ -93,7 +99,12 @@ export default function InformativoForm({ informativo, onSuccess }: Props) {
           />
         </div>
 
-        <Button type="submit" disabled={loading} variant="success">
+        <Button
+          type="submit"
+          disabled={loading}
+          variant="success"
+          className="md:ml-auto"
+        >
           {loading ? "Salvando..." : informativo ? "Atualizar" : "Criar"}
         </Button>
       </div>
