@@ -10,3 +10,10 @@ export function getCookieConfig(): CookieOptions {
     maxAge: 1000 * 60 * 60 * 48, // 2 dias
   };
 }
+
+export function clearCookieConfig(): CookieOptions {
+  return {
+    ...getCookieConfig(),
+    maxAge: 0,
+  };
+}

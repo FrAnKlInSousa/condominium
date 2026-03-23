@@ -10,7 +10,7 @@ import {
 import { AuthService } from './auth.service';
 import type { Response } from 'express';
 import { JwtAuthGuard } from './jwt-auth.guard';
-import { getCookieConfig } from './cookie.config';
+import { clearCookieConfig, getCookieConfig } from './cookie.config';
 
 @Controller('auth')
 export class AuthController {
@@ -41,11 +41,7 @@ export class AuthController {
 
   @Get('logout')
   logout(@Res({ passthrough: true }) res: Response) {
-    res.clearCookie('access_token', {
-      httpOnly: true,
-      sameSite: 'lax',
-      secure: process.env.NODE_ENV === 'production',
-    });
+    res.clearCookie('access_token', clearCookieConfig());
 
     return { success: true };
   }
