@@ -49,10 +49,13 @@ export class AuthService {
 
   async login(email: string, password: string) {
     const user = await this.validateUser(email, password);
-
+    if (user.status !== 'ACTIVE') {
+      throw new UnauthorizedException('Usuário inativo');
+    }
     const payload = {
       sub: user.id,
       email: user.email,
+      role: user.role,
     };
 
     return {
