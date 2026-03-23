@@ -6,6 +6,7 @@ import { getInformativos, deleteInformativo } from "@/lib/api";
 import Button from "@/components/Button";
 import { useToast } from "@/context/ToastContext";
 import { useAuth } from "@/context/AuthContext";
+import { formatDate } from "@/lib/date";
 
 type Informativo = {
   id: number;
@@ -196,9 +197,7 @@ export default function InformativosPage() {
         >
           <h3 className="text-lg font-semibold text-gray-800">{c.titulo}</h3>
           <p className="text-gray-600">{c.descricao}</p>
-          <small className="text-gray-400">
-            {new Date(c.data).toLocaleDateString("pt-BR")}
-          </small>
+          <small className="text-gray-400">{formatDate(c.data)}</small>
 
           {isAuthenticated && (
             <div className="flex gap-2 mt-2">
