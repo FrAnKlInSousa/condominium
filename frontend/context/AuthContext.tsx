@@ -7,6 +7,7 @@ type AuthContextType = {
   isAuthenticated: boolean;
   loading: boolean;
   logoutUser: () => Promise<void>;
+  refreshUser: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -15,19 +16,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    async function checkAuth() {
-      try {
-        await getMe();
-        setIsAuthenticated(true);
-      } catch {
-        setIsAuthenticated(false);
-      } finally {
-        setLoading(false);
-      }
+  async function refreshUser() {
+    try {
+      await getMe();
+      setIsAuthenticated(true);
+    } catch {
+      setIsAuthenticated(false);
     }
+  }
 
-    checkAuth();
+  useEffect(() => {
+    refreshUser().finally(() => setLoading(false));
   }, []);
 
   async function logoutUser() {
@@ -36,7 +35,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, loading, logoutUser }}>
+    <AuthContext.Provider
+      value={{ isAuthenticated, loading, logoutUser, refreshUser }}
+    >
       {children}
     </AuthContext.Provider>
   );

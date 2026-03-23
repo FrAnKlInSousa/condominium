@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { login } from "@/lib/api";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -10,6 +11,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
+  const { refreshUser } = useAuth();
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
@@ -17,9 +19,9 @@ export default function LoginPage() {
     setLoading(true);
 
     try {
-      const res = await login(email, password);
-
       await login(email, password);
+
+      await refreshUser();
 
       router.push("/informativos");
     } catch (err) {
