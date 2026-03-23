@@ -15,13 +15,15 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body className="bg-gray-100 text-gray-900">
-        <header className="bg-white shadow">
-          <div className="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
-            <h1 className="font-bold text-lg">SIM Sapopemba</h1>
-          </div>
-        </header>
+        <ToastProvider>
+          <header className="bg-white shadow">
+            <div className="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
+              <h1 className="font-bold text-lg">SIM Sapopemba</h1>
+            </div>
+          </header>
 
-        <ToastProvider>{children}</ToastProvider>
+          <main className="max-w-4xl mx-auto px-4 py-6">{children}</main>
+        </ToastProvider>
       </body>
     </html>
   );

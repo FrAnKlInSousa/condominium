@@ -173,7 +173,7 @@ export default function InformativosPage() {
         )}
       </div>
 
-      <div className="bg-white p-4 rounded shadow flex flex-col gap-3 md:flex-row">
+      <div className="bg-white p-4 rounded-lg shadow-sm flex flex-col gap-3 md:flex-row border">
         <input
           className="border rounded px-3 py-2 w-full"
           placeholder="Buscar..."
@@ -229,7 +229,7 @@ export default function InformativosPage() {
       {informativos.map((c) => (
         <div
           key={c.id}
-          className="bg-white p-5 rounded shadow space-y-3 border border-gray-100"
+          className="bg-white p-5 rounded-lg shadow-sm space-y-3 border hover:shadow-md transition"
         >
           <h3 className="text-lg font-semibold text-gray-800">{c.titulo}</h3>
           <p className="text-gray-600">{c.descricao}</p>

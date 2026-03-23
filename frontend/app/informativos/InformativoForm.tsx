@@ -66,7 +66,7 @@ export default function InformativoForm({ informativo, onSuccess }: Props) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-white p-5 rounded shadow space-y-4"
+      className="bg-white p-5 rounded-lg shadow-sm space-y-4 border"
     >
       <Input
         placeholder="Título"
