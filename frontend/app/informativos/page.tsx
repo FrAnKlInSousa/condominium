@@ -8,6 +8,7 @@ import { getMe } from "@/lib/api";
 import { getInformativos, deleteInformativo } from "@/lib/api";
 import { logout } from "@/lib/api";
 import Button from "@/components/Button";
+import Toast from "@/components/Toast";
 
 type Informativo = {
   id: number;
@@ -80,12 +81,12 @@ export default function InformativosPage() {
   }
 
   function mostrarMensagemTemp(texto: string) {
-    setMensagem(texto);
-    setMostrarToast(true);
+    setMostrarToast(false);
 
     setTimeout(() => {
-      setMostrarToast(false);
-    }, 1500);
+      setMensagem(texto);
+      setMostrarToast(true);
+    }, 10);
   }
 
   async function handleDelete(id: number) {
@@ -181,7 +182,12 @@ export default function InformativosPage() {
           </Button>
         )}
       </div>
-      {mostrarToast && <div>{mensagem}</div>}
+
+      <Toast
+        message={mensagem}
+        visible={mostrarToast}
+        onClose={() => setMostrarToast(false)}
+      />
 
       <div className="bg-white p-4 rounded shadow flex flex-col gap-3 md:flex-row">
         <input
