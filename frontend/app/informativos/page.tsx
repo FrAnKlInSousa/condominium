@@ -2,11 +2,10 @@
 
 import { useEffect, useState } from "react";
 import InformativoForm from "./InformativoForm";
-import { getMe } from "@/lib/api";
-
 import { getInformativos, deleteInformativo } from "@/lib/api";
 import Button from "@/components/Button";
 import { useToast } from "@/context/ToastContext";
+import { useAuth } from "@/context/AuthContext";
 
 type Informativo = {
   id: number;
@@ -32,7 +31,7 @@ export default function InformativosPage() {
     useState<Informativo | null>(null);
 
   const [refreshKey, setRefreshKey] = useState(0);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { isAuthenticated } = useAuth();
 
   const { showToast } = useToast();
 
@@ -48,20 +47,6 @@ export default function InformativosPage() {
   useEffect(() => {
     loadInformativos();
   }, [paginaAtual, refreshKey, dataFiltro]);
-
-  // 🔐 controle simples de auth (apenas UI)
-  useEffect(() => {
-    async function checkAuth() {
-      try {
-        await getMe();
-        setIsAuthenticated(true);
-      } catch {
-        setIsAuthenticated(false);
-      }
-    }
-
-    checkAuth();
-  }, []);
 
   async function loadInformativos() {
     try {
