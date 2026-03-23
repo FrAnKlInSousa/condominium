@@ -1,10 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { Pool } from 'pg';
+import { UserRole, UserStatus } from './types/user.types';
 
 export interface User {
   id: string;
   email: string;
   password: string;
+  status: UserStatus;
+  role: UserRole;
 }
 
 @Injectable()
