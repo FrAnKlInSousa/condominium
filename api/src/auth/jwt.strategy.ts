@@ -1,15 +1,22 @@
+'use strict';
+
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-jwt';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor() {
+  constructor(private configService: ConfigService) {
+    const secret = configService.get<string>('JWT_SECRET');
+
+    if (!secret) {
+      throw new Error('JWT_SECRET não definido.');
+    }
+
     super({
-      jwtFromRequest: (req) => {
-        return req?.cookies?.access_token;
-      },
-      secretOrKey: process.env.JWT_SECRET || 'segredo_super_secreto',
+      jwtFromRequest: (req) => req?.cookies?.access_token,
+      secretOrKey: secret,
     });
   }
 
