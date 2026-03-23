@@ -8,7 +8,7 @@ import { getMe } from "@/lib/api";
 import { getInformativos, deleteInformativo } from "@/lib/api";
 import { logout } from "@/lib/api";
 import Button from "@/components/Button";
-import Toast from "@/components/Toast";
+import { useToast } from "@/context/ToastContext";
 
 type Informativo = {
   id: number;
@@ -30,13 +30,12 @@ export default function InformativosPage() {
   );
   const [deletandoIds, setDeletandoIds] = useState<Set<number>>(new Set());
 
-  const [mensagem, setMensagem] = useState("");
-  const [mostrarToast, setMostrarToast] = useState(false);
   const [informativoSelecionado, setInformativoSelecionado] =
     useState<Informativo | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
   const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { showToast } = useToast();
 
   // 🔁 debounce (substitui RxJS)
   useEffect(() => {
@@ -80,15 +79,6 @@ export default function InformativosPage() {
     }
   }
 
-  function mostrarMensagemTemp(texto: string) {
-    setMostrarToast(false);
-
-    setTimeout(() => {
-      setMensagem(texto);
-      setMostrarToast(true);
-    }, 10);
-  }
-
   async function handleDelete(id: number) {
     if (confirmandoDeleteId !== id) {
       setConfirmandoDeleteId(id);
@@ -102,7 +92,7 @@ export default function InformativosPage() {
     try {
       await deleteInformativo(id);
 
-      mostrarMensagemTemp("Informativo deletado");
+      showToast("Informativo deletado");
       setConfirmandoDeleteId(null);
 
       loadInformativos();
@@ -153,9 +143,9 @@ export default function InformativosPage() {
     setRefreshKey((prev) => prev + 1);
 
     if (isEdit) {
-      mostrarMensagemTemp("Informativo atualizado");
+      showToast("Informativo atualizado");
     } else {
-      mostrarMensagemTemp("Informativo criado");
+      showToast("Informativo criado");
     }
   }
 
@@ -182,12 +172,6 @@ export default function InformativosPage() {
           </Button>
         )}
       </div>
-
-      <Toast
-        message={mensagem}
-        visible={mostrarToast}
-        onClose={() => setMostrarToast(false)}
-      />
 
       <div className="bg-white p-4 rounded shadow flex flex-col gap-3 md:flex-row">
         <input

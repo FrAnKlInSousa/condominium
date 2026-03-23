@@ -5,6 +5,8 @@ export const metadata = {
   description: "Sistema de informativos",
 };
 
+import { ToastProvider } from "@/context/ToastContext";
+
 export default function RootLayout({
   children,
 }: {
@@ -19,7 +21,7 @@ export default function RootLayout({
           </div>
         </header>
 
-        <main className="max-w-4xl mx-auto px-4 py-6">{children}</main>
+        <ToastProvider>{children}</ToastProvider>
       </body>
     </html>
   );
