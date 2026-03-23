@@ -202,10 +202,7 @@ export default function InformativosPage() {
 
           {isAuthenticated && (
             <div className="flex gap-2 mt-2">
-              <Button
-                className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
-                onClick={() => editar(c)}
-              >
+              <Button variant="warning" onClick={() => editar(c)}>
                 Editar
               </Button>
 
