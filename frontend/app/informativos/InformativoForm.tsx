@@ -68,11 +68,13 @@ export default function InformativoForm({ informativo, onSuccess }: Props) {
       onSubmit={handleSubmit}
       className="bg-white p-5 rounded-lg shadow-sm space-y-4 border"
     >
-      <Input
-        placeholder="Título"
-        value={titulo}
-        onChange={(e) => setTitulo(e.target.value)}
-      />
+      <div className="flex flex-col md:w-1/2">
+        <Input
+          placeholder="Título"
+          value={titulo}
+          onChange={(e) => setTitulo(e.target.value)}
+        />
+      </div>
 
       <textarea
         className="border rounded px-3 py-2 w-full"
